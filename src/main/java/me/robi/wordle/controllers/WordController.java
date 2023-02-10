@@ -34,14 +34,14 @@ public class WordController {
 
     @PostMapping("/guess")
     public ResponseEntity guessWord(@CookieValue(value = USER_ID) String userId, @RequestParam(name = "word") String guess) {
-        if(guess.length() != 5) {
+        if(guess.length() != 5)
             return new ResponseEntity(Collections.singletonMap("error", "Word Length must be 5."), HttpStatus.BAD_GATEWAY);
-        }
+        
         Map<String, Object> responseBody = new HashMap<>();
 
         Map<Character, Integer> charCount = new HashMap<>();
         LetterStatus[] statuses = new LetterStatus[5];
-        // TODO check if word is valid english word
+
         for(int i = 0; i < wordsHolder.wordOfTheDay.length(); i++) {
             char c = wordsHolder.wordOfTheDay.charAt(i);
             char guessCharacter = guess.charAt(i);
