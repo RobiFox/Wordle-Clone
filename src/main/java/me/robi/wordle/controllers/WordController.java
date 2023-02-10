@@ -34,6 +34,7 @@ public class WordController {
 
     @PostMapping("/guess")
     public ResponseEntity guessWord(@CookieValue(value = USER_ID) String userId, @RequestParam(name = "word") String guess) {
+        guess = guess.toLowerCase();
         if(guess.length() != 5)
             return new ResponseEntity(Collections.singletonMap("error", "Word Length must be 5."), HttpStatus.BAD_REQUEST);
         if(!wordsHolder.words.contains(guess))
