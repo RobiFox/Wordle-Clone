@@ -36,7 +36,8 @@ public class WordController {
     public ResponseEntity guessWord(@CookieValue(value = USER_ID) String userId, @RequestParam(name = "word") String guess) {
         if(guess.length() != 5)
             return new ResponseEntity(Collections.singletonMap("error", "Word Length must be 5."), HttpStatus.BAD_GATEWAY);
-        
+        if(!wordsHolder.words.contains(guess))
+            return new ResponseEntity(Collections.singletonMap("error", "Word must be a valid English word."), HttpStatus.BAD_REQUEST);
         Map<String, Object> responseBody = new HashMap<>();
 
         Map<Character, Integer> charCount = new HashMap<>();
