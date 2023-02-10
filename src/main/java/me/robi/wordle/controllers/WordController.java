@@ -39,13 +39,27 @@ public class WordController {
         }
         Map<String, Object> responseBody = new HashMap<>();
 
+        Map<Character, Integer> charCount = new HashMap<>();
         LetterStatus[] statuses = new LetterStatus[5];
-        // TODO account for duplicate characters
         // TODO check if word is valid english word
+        for(int i = 0; i < wordsHolder.wordOfTheDay.length(); i++) {
+            char c = wordsHolder.wordOfTheDay.charAt(i);
+            char guessCharacter = guess.charAt(i);
+            charCount.putIfAbsent(c, 0);
+            if (guessCharacter == c) {
+                statuses[i] = LetterStatus.CORRECT;
+            } else {
+                charCount.put(c, charCount.get(c) + 1);
+            }
+        }
+
         for(int i = 0; i < statuses.length; i++) {
-            if(guess.charAt(i) == wordsHolder.wordOfTheDay.charAt(i)) statuses[i] = LetterStatus.CORRECT;
-            else if(wordsHolder.wordOfTheDay.contains(String.valueOf(guess.charAt(i)))) statuses[i] = LetterStatus.CONTAINS;
-            else statuses[i] = LetterStatus.NONE;
+            char guessCharacter = guess.charAt(i);
+            int count = charCount.get(guessCharacter) != null ? charCount.get(guessCharacter) : 0;
+
+            if(statuses[i] != null) continue;
+
+            statuses[i] = count > 0 ? LetterStatus.CONTAINS : LetterStatus.NONE;
         }
 
         responseBody.put("wordStatus", statuses);
